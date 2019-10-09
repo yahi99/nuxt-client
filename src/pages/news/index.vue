@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<base-button design="primary" @click="$router.push({ name: 'news-new' })">
+		<base-button class="create-news-btn" design="primary" @click="$router.push({ name: 'news-new' })">
 			Artikel anlegen
 		</base-button>
 
@@ -20,26 +20,12 @@
 				<base-icon v-else source="material" icon="list" fill="gray" />
 			</base-button>
 		</div>
-		<section :class="{ 'grid-container': !isList, list: isList }">
-			<news-card
-				v-for="article of testNews"
-				:id="article._id"
-				:key="article._id"
-				:category="article.category"
-				:title="article.title"
-				:created-at="article.createdAt"
-				:created-by="article.createdBy"
-				:picture="article.picture"
-				:event-date="article.eventDate"
-				:is-landscape="isList"
-				>{{ article.content }}</news-card
-			>
-
+		<section :class="{ 'grid-container': !isList, 'list': isList }">
 			<news-card
 				v-for="article of news"
 				:id="article._id"
 				:key="article._id"
-				category="Not available yet"
+				:category="article.category"
 				:title="article.title"
 				:created-at="article.createdAt"
 				:created-by="article.creator.firstName + ' ' + article.creator.lastName"
@@ -107,7 +93,7 @@ export default {
 				picture: "https://source.unsplash.com/nHRfTeqAxjs",
 				eventDate: "",
 				content:
-					"NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS ",
+					"NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS news NEWS ",
 			};
 
 			var newsArticles = [article1, article2, article3];
@@ -144,20 +130,12 @@ export default {
 
 .grid-container {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	grid-gap: var(--space-md);
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	grid-gap: var(--space-lg);
 	align-items: flex-start;
 	justify-items: center;
 	width: 100%;
-	padding: var(--space-md);
-}
-
-.grid {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	align-items: flex-start;
-	width: 100%;
+	padding:var(--space-md);
 }
 
 .view-toggles {
@@ -176,5 +154,9 @@ export default {
 	grid-gap: var(--space-md);
 	width: 100%;
 	padding: var(--space-md);
+}
+
+.create-news-btn {
+	margin-left: var(--space-md);
 }
 </style>
