@@ -33,6 +33,12 @@ module.exports = {
 			"error",
 			{ max: 250, skipBlankLines: true, skipComments: true },
 		],
+		// require json keys to be sorted when more than n entries
+		"sort-keys": [
+			"error",
+			"asc",
+			{ caseSensitive: true, natural: false, minKeys: 3 },
+		],
 		// Config from existing client & server
 		"no-underscore-dangle": ["error", { allow: ["_id", "_v", "__v"] }],
 		"no-shadow": ["error", { allow: ["err", "error", "Vue"] }],
