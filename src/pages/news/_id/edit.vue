@@ -16,7 +16,6 @@
 					},
 				]"
 			/>
-			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
 
 			<form-news
 				v-slot:actions="{ remove, cancel }"
