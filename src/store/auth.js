@@ -30,6 +30,7 @@ export const actions = {
 	},
 	async logout(ctx) {
 		this.$cookies.remove("jwt");
+		this.$router.push({ name: "login" });
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
@@ -70,6 +71,11 @@ export const actions = {
 		);
 
 		return userRolesMapped.find((r) => r.name === roleName) !== undefined;
+	},
+	setLogoutTimer({ commit }, expirationTime) {
+		setTimeout(() => {
+			commit("logout");
+		}, expirationTime * 1000);
 	},
 };
 
