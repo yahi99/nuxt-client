@@ -65,12 +65,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .row-selection-info {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-md);
-	color: var(--color-white);
+	color: var(--color-on-info-light);
 	background: var(--color-info-light);
 }
 

@@ -34,14 +34,14 @@
 		--button-background: var(--color-success);
 		--button-text-color: var(--color-white);
 		&:hover {
-			--button-background: var(--color-success--dark);
+			--button-background: var(--color-success-dark);
 		}
 	}
 	&.is-danger {
 		--button-background: var(--color-danger);
 		--button-text-color: var(--color-white);
 		&:hover {
-			--button-background: var(--color-danger--dark);
+			--button-background: var(--color-danger-dark);
 		}
 	}
 	&.is-fancy {

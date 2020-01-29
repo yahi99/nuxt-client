@@ -462,6 +462,7 @@ export default {
 			}
 			td {
 				padding: var(--space-xs);
+				color: var(--color-on-info-light);
 			}
 		}
 	}
