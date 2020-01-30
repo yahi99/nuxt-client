@@ -18,10 +18,10 @@ env:
 
 stages:
   - test
-  - name: build
+  - name: buildAndDeploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
-  - name: deploy
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+  #- name: deploy
+  #  if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
 jobs:
   include:
@@ -71,14 +71,20 @@ jobs:
         - rv-upload -F **/reports/**/*.html
 
     # Build Docker Images
-    - stage: build
+    - stage: buildAndDeploy
       name: build:nuxt
       language: generic
-      script: bash ./deploy/build.sh -p client
-    - script: bash ./deploy/build.sh -p storybook
+      script: 
+        - bash ./deploy/build.sh -p client
+        - bash ./deploy/deploy.sh -p client
+    - script: 
+        - bash ./deploy/build.sh -p storybook
+        - bash ./deploy/deploy.sh -p storybook
       name: build:storybook
       language: generic
-    - script: bash ./deploy/build.sh -p vuepress
+    - script: 
+      - bash ./deploy/build.sh -p vuepress
+      - bash ./deploy/deploy.sh -p vuepress
       name: build:docs
       language: generic
 
