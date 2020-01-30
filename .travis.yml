@@ -14,14 +14,15 @@ env:
   global:
     - TZ=Europe/Berlin
     - GIT_SHA=$( git rev-parse HEAD )
-    - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:]" )_v$( jq -r '.version' package.json )_$( date +"%y%m%d%H%M" )
+    - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:]" )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
+#$( date +"%y%m%d%H%M" )
 
 stages:
   - test
-  - name: buildAndDeploy
+  - name: build
     if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
-  #- name: deploy
-  #  if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+  - name: deploy
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
 jobs:
   include:
@@ -71,20 +72,14 @@ jobs:
         - rv-upload -F **/reports/**/*.html
 
     # Build Docker Images
-    - stage: buildAndDeploy
+    - stage: build
       name: build:nuxt
       language: generic
-      script: 
-        - bash ./deploy/build.sh -p client
-        - bash ./deploy/deploy.sh -p client
-    - script: 
-        - bash ./deploy/build.sh -p storybook
-        - bash ./deploy/deploy.sh -p storybook
+      script: bash ./deploy/build.sh -p client
+    - script: bash ./deploy/build.sh -p storybook
       name: build:storybook
       language: generic
-    - script: 
-      - bash ./deploy/build.sh -p vuepress
-      - bash ./deploy/deploy.sh -p vuepress
+    - script: bash ./deploy/build.sh -p vuepress
       name: build:docs
       language: generic
 
