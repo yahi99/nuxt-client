@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
+import { supportedFilterMatchingTypes } from "./defaultFilters";
 
 export default {
 	props: {

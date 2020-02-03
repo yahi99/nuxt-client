@@ -8,8 +8,7 @@ import MultiSelect from "vue-multiselect";
 import FlatPickr from "vue-flatpickr-component";
 const _ = require("lodash");
 
-import { supportedFilterTypes } from "@mixins/defaultFilters";
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
+import { supportedFilterTypes, supportedFilterMatchingTypes } from "./defaultFilters";
 
 function getWrapper(attributes) {
 	return mount(BaseTable, {
@@ -175,107 +174,111 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
 	});
 
-	it("Should allow filtering the rows based on string properties", () => {
-		var wrapper = getShallowWrapper({ filterable: true });
+	// it("Should allow filtering the rows based on string properties", () => {
+	// 	var wrapper = getShallowWrapper({ filterable: true });
 
-		var newFiltersSelected = [
-			{
-				label: "Vorname",
-				type: "text",
-				property: "firstName",
-				matchingType: {
-					value: "contains",
-					label: "enthält",
-				},
-				value: "Mar",
-			},
-		];
-		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+	// 	var newFiltersSelected = [
+	// 		{
+	// 			label: "Vorname",
+	// 			type: "text",
+	// 			property: "firstName",
+	// 			matchingType: {
+	// 				value: "contains",
+	// 				label: "enthält",
+	// 			},
+	// 			value: "Mar",
+	// 		},
+	// 	];
+	// 	wrapper.setData({ newFiltersSelected: newFiltersSelected });
 
-		expect(wrapper.text()).toContain("Mario");
-		expect(wrapper.text()).not.toContain("Hulk");
+	// 	expect(wrapper.text()).toContain("Mario");
+	// 	expect(wrapper.text()).not.toContain("Hulk");
 
-		var newFiltersSelected = [
-			{
-				label: "Vorname",
-				type: "text",
-				property: "firstName",
-				matchingType: {
-					value: "equals",
-					label: "ist gleich",
-				},
-				value: "Mario",
-			},
-		];
-		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+	// 	var newFiltersSelected = [
+	// 		{
+	// 			label: "Vorname",
+	// 			type: "text",
+	// 			property: "firstName",
+	// 			matchingType: {
+	// 				value: "equals",
+	// 				label: "ist gleich",
+	// 			},
+	// 			value: "Mario",
+	// 		},
+	// 	];
+	// 	wrapper.setData({ newFiltersSelected: newFiltersSelected });
 
-		expect(wrapper.text()).toContain("Mario");
-		expect(wrapper.text()).not.toContain("Hulk");
-	});
+	// 	expect(wrapper.text()).toContain("Mario");
+	// 	expect(wrapper.text()).not.toContain("Hulk");
+	// });
 
-	it("Should allow filtering the based on numeric properties", () => {
-		var wrapper = getShallowWrapper({ filterable: true });
+	// it("Should allow filtering the based on numeric properties", () => {
+	// 	var wrapper = getShallowWrapper({ filterable: true });
 
-		var newFiltersSelected = [
-			{
-				label: "Alter",
-				type: "number",
-				property: "age",
-				matchingType: {
-					value: "equals",
-					label: "ist gleich",
-				},
-				value: "999",
-			},
-		];
-		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+	// 	var newFiltersSelected = [
+	// 		{
+	// 			label: "Alter",
+	// 			type: "number",
+	// 			property: "age",
+	// 			matchingType: {
+	// 				value: "equals",
+	// 				label: "ist gleich",
+	// 			},
+	// 			value: "999",
+	// 		},
+	// 	];
+	// 	wrapper.setData({ newFiltersSelected: newFiltersSelected });
 
-		expect(wrapper.text()).toContain("Mario");
-		expect(wrapper.text()).not.toContain("Hulk");
-	});
+	// 	expect(wrapper.text()).toContain("Mario");
+	// 	expect(wrapper.text()).not.toContain("Hulk");
+	// });
 
-	it("Should allow filtering the based on multiple options", () => {
-		var wrapper = getShallowWrapper({ filterable: true });
+	// it("Should allow filtering the based on multiple options", () => {
+	// 	var wrapper = getShallowWrapper({ filterable: true });
 
-		var newFiltersSelected = [
-			{
-				label: "Vorname",
-				type: "select",
-				property: "firstName",
-				value: [
-					{
-						checked: true,
-						value: "Mario",
-						label: "Mario",
-					},
-				],
-			},
-		];
-		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+	// 	var newFiltersSelected = [
+	// 		{
+	// 			label: "Vorname",
+	// 			type: "select",
+	// 			property: "firstName",
+	// 			value: [
+	// 				{
+	// 					checked: true,
+	// 					value: "Mario",
+	// 					label: "Mario",
+	// 				},
+	// 			],
+	// 		},
+	// 	];
+	// 	wrapper.setData({ newFiltersSelected: newFiltersSelected });
 
-		expect(wrapper.text()).toContain("Mario");
-		expect(wrapper.text()).not.toContain("Hulk");
-	});
+	// 	expect(wrapper.text()).toContain("Mario");
+	// 	expect(wrapper.text()).not.toContain("Hulk");
+	// });
 
 	it("Should allow filtering with custom filter implementation", () => {
-		var wrapper = getShallowWrapper({ filterable: true });
+		var wrapper = getShallowWrapper({ filter: row => row.firstName.includes("Mar") });
 
-		var newFiltersSelected = [
-			{
-				label: "Vorname",
-				type: "text",
-				property: "firstName",
-				value: "Mario",
-				matchingType: {
-					implementation: (value, targetValue) => value < targetValue,
-					label: "ist kleiner",
-				},
-			},
-		];
-		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+		expect(wrapper.text()).toContain("Mario");
+		expect(wrapper.text()).not.toContain("Hulk");
+		// var wrapper = getShallowWrapper({ filterable: true });
 
-		expect(wrapper.text()).toContain("Hulk");
-		expect(wrapper.text()).not.toContain("Mario");
+		// var newFiltersSelected = [
+		// 	{
+		// 		label: "Vorname",
+		// 		type: "text",
+		// 		property: "firstName",
+		// 		value: "Mario",
+		// 		matchingType: {
+		// 			implementation: (value, targetValue) => value < targetValue,
+		// 			label: "ist kleiner",
+		// 		},
+		// 	},
+		// ];
+		// wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		// expect(wrapper.text()).toContain("Hulk");
+		// expect(wrapper.text()).not.toContain("Mario");
 	});
 
 	it("updates its filters when filtersSelected property is changed", () => {

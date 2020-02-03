@@ -6,19 +6,19 @@
 			label="Filter hinzufügen"
 			:multiple="true"
 			placeholder="Filter hinzufügen"
-			:options="filters"
+			:options="filterOptions"
 			option-label="label"
 			:taggable="true"
 			:tag-placeholder="`Volltextsuche`"
 			track-by="label"
-			:value="selectedFiltersWithLabels"
+			:value="selectedFilters"
 			@remove="removeFilter"
-			@select="selectFilter"
+			@select="openFilterModal"
 			@tag="setSearch"
 		>
 			<template v-slot:tag="slotProps">
 				<span class="multiselect__tag">
-					<span @mousedown.prevent="editFilter(slotProps.option)">
+					<span @mousedown.prevent="openFilterModal(slotProps.option)">
 						{{ slotProps.option.tagLabel }}
 					</span>
 					<i
@@ -33,7 +33,7 @@
 		</base-select>
 
 		<filter-modal
-			:active.sync="editFilterActive"
+			:active.sync="filterModalActive"
 			:filter-opened="filterOpened"
 			@set-filter="setFilter"
 		/>
@@ -42,44 +42,67 @@
 
 <script>
 import FilterModal from "./FilterModal.vue";
+import { supportedFilterMatchingTypes, defaultMatchingTypes, filterImplementations } from "./defaultFilters";
+
 export default {
 	components: {
 		FilterModal,
 	},
 	props: {
-		filters: {
+		columns: {
 			type: Array,
-			default: () => [],
-		},
-		value: {
-			type: Array,
-			default: () => [],
+			required: true
 		},
 	},
 	data() {
 		return {
-			editFilterActive: false,
+			filterModalActive: false,
 			filterOpened: {},
-			selectedFilters: this.value,
+			selectedFilters: [],
 		};
 	},
 	computed: {
-		selectedFiltersWithLabels: {
-			get: function() {
-				this.selectedFilters.forEach((filter) => this.setTagLabel(filter));
-				return this.selectedFilters;
-			},
-			set: function(newValue) {
-				this.selectedFilters = newValue;
-			},
+		filterOptions: function(){
+			const filters = [];
+			const filterableColumns = this.columns.filter(column => column.filterable);
+			filterableColumns.forEach(column => {
+				const defaultMatchingType = defaultMatchingTypes[column.type];
+				filters.push({
+					label: column.label,
+					type: column.type,
+					property: column.field,
+					matchingType: defaultMatchingType? supportedFilterMatchingTypes[column.type][defaultMatchingType] : {},
+				})
+			})
+			return filters;
 		},
+		filterMethod: function() {
+			const activeFilters = this.selectedFilters;
+
+			return (row) => {
+				return activeFilters.every(filter => {
+					if (filter.type === "fulltextSearch") {
+						return filterImplementations["fulltextSearch"](row, filter.value);
+					}
+					if (filter.type === "select") {
+						return filterImplementations["select"](row[filter.property], filter.value);
+					}
+					const filterImplementation = filterImplementations[filter.type][filter.matchingType.value];
+					return filterImplementation(row[filter.property], filter.value);
+				})
+			};
+		}
 	},
 	watch: {
-		value() {
-			this.selectedFilters = this.value;
-		},
+		selectedFilters() {
+			this.$emit("set-filter", this.filterMethod);
+		}
 	},
 	methods: {
+		openFilterModal(filter) {
+			this.filterModalActive = true;
+			this.filterOpened = filter;
+		},
 		setSearch(searchString) {
 			const fulltextSearchQuery = this.selectedFilters.find(
 				(filter) => filter.label === "Volltextsuche"
@@ -95,21 +118,9 @@ export default {
 					value: searchString,
 				});
 			}
-			this.$emit("input", this.selectedFilters);
-		},
-		editFilter(filter) {
-			this.editFilterActive = true;
-			this.filterOpened = filter;
-			this.$emit("input", this.selectedFilters);
 		},
 		removeFilter(filter) {
 			this.selectedFilters.splice(this.selectedFilters.indexOf(filter), 1);
-			this.$emit("input", this.selectedFilters);
-		},
-		selectFilter(filter) {
-			this.$set(filter, "selected", true);
-			this.filterOpened = filter;
-			this.editFilterActive = true;
 		},
 		setTagLabel(filter) {
 			if (["number", "text"].includes(filter.type)) {
@@ -151,8 +162,7 @@ export default {
 				});
 			}
 			this.filterOpened = {};
-			this.editFilterActive = false;
-			this.$emit("input", this.selectedFilters);
+			this.filterModalActive = false;
 		},
 	},
 };

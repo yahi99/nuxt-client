@@ -104,28 +104,40 @@ const tableColumns = [
 	{
 		field: "firstName",
 		label: "Vorname",
+		type: "text",
 		sortable: true,
+		filterable: true,
 	},
 	{
 		field: "lastName",
 		label: "Nachname",
+		type: "text",
+		filterable: true,
 	},
 	{
 		field: "address.city",
 		label: "Stadt",
+		type: "text",
 		sortable: true,
+		filterable: true,
 	},
 	{
 		field: "age",
 		label: "Alter",
+		type: "number",
+		filterable: true,
 	},
 	{
 		field: "birthday",
 		label: "Geburtstag",
+		type: "date",
+		filterable: true,
 	},
 	{
 		field: "agreed",
 		label: "Zustimmung",
+		type: "select",
+		filterable: true,
 	},
 ];
 

@@ -4,11 +4,10 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<div class="toolbelt">
-				<filter-menu
-					v-if="filterable && selectedRowIds.length < 1"
-					v-model="newFiltersSelected"
-					:filters="filters"
-				/>
+					<filter-menu
+						:columns="columns"
+						@set-filter="setFilter"
+					/>
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
@@ -98,14 +97,10 @@
 </template>
 
 <script>
-import { getValueByPath, getNestedObjectValues, indexOf } from "@utils/helpers";
-import camelCase from "lodash/camelCase";
+import { getValueByPath, indexOf } from "@utils/helpers";
 import Pagination from "@components/organisms/Pagination.vue";
 import FilterMenu from "./FilterMenu.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
-import defaultFiltersMixin from "@mixins/defaultFilters";
-import { supportedFilterTypes } from "@mixins/defaultFilters";
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
@@ -113,7 +108,6 @@ export default {
 		FilterMenu,
 		RowSelectionBar,
 	},
-	mixins: [defaultFiltersMixin],
 	props: {
 		actions: {
 			type: Array,
@@ -124,6 +118,9 @@ export default {
 		columns: {
 			type: Array,
 			default: () => [],
+			validator: columns => columns.every((column) => {
+				return !!column.label && !!column.field
+			})
 		},
 		currentPage: {
 			type: Number,
@@ -136,55 +133,9 @@ export default {
 		filterable: {
 			type: Boolean,
 		},
-		filters: {
-			type: Array,
-			default: () => [],
-			validator: function(filters) {
-				return filters.every((filter) => {
-					const hasValidType =
-						!!filter.type && supportedFilterTypes.includes(filter.type);
-
-					var hasValidMatchingType = false;
-
-					if (
-						!supportedFilterMatchingTypes[filter.type] &&
-						!filter.matchingType
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						supportedFilterMatchingTypes[filter.type] &&
-						filter.matchingType &&
-						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						filter.matchingType &&
-						filter.matchingType.implementation &&
-						filter.matchingType.value &&
-						filter.matchingType.label
-					) {
-						hasValidMatchingType = true;
-					}
-
-					const isValidSelectFilter =
-						filter.value &&
-						Array.isArray(filter.value) &&
-						filter.value.length > 0 &&
-						filter.value.every((value) => value.value && value.label);
-
-					return (
-						filter.label &&
-						(filter.property || filter.type == "fulltextSearch") &&
-						hasValidType &&
-						hasValidMatchingType &&
-						(isValidSelectFilter || filter.type !== "select")
-					);
-				});
-			},
-		},
-		filtersSelected: {
-			type: Array,
-			default: () => [],
+		filter: {
+			type: Function,
+			default: () => true,
 		},
 		paginated: Boolean,
 		rowsPerPage: {
@@ -209,11 +160,9 @@ export default {
 	},
 	data() {
 		return {
-			editFilterActive: false,
 			currentSortColumn: "",
 			tableData: this.data,
-			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
+			userFilter: () => true,
 			selectedRowIds: this.selectedRows.map((row) => row[this.trackBy]),
 			isAsc: false,
 			defaultSort: [String, Array],
@@ -231,30 +180,7 @@ export default {
 			return this.isAsc ? "asc" : "desc";
 		},
 		filteredRows() {
-			return this.data.filter((row) => {
-				return this.newFiltersSelected.every((filter) => {
-					if (filter.type === "fulltextSearch") {
-						return getNestedObjectValues(row).some((value) =>
-							(value.toString() || "").includes(filter.value)
-						);
-					} else {
-						const functionName = camelCase(
-							`filter-${filter.type}-${(filter.matchingType || {}).value}`
-						);
-						const defaultFunctionName = camelCase(
-							`filter-${filter.type}-default`
-						);
-						const filterFunction =
-							(filter.matchingType || {}).implementation ||
-							this[functionName] ||
-							this[defaultFunctionName];
-						return filterFunction(
-							getValueByPath(row, filter.property),
-							filter.value
-						);
-					}
-				});
-			});
+			return this.data.filter((row) => this.filter(row) && this.userFilter(row));
 		},
 		filteredAndSortedRows() {
 			if (
@@ -309,12 +235,6 @@ export default {
 			if (!this.backendSorting) {
 				this.sort(this.currentSortColumn, true);
 			}
-		},
-		filtersSelected() {
-			this.newFiltersSelected = this.filtersSelected;
-		},
-		newFiltersSelected() {
-			this.$emit("update:filters-selected", this.newFiltersSelected);
 		},
 		selectedRows(rows) {
 			this.selectedRowIds = rows.map((row) => row[this.trackBy]);
@@ -414,6 +334,10 @@ export default {
 			this.selectedRowIds = [];
 			this.$emit("update:selected-rows", this.newSelectedRows);
 			this.$emit("all-rows-selected", this.newSelectedRows);
+		},
+
+		setFilter(newFilter) {
+			this.userFilter = newFilter;
 		},
 	},
 };

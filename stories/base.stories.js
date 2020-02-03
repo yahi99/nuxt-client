@@ -268,6 +268,7 @@ storiesOf("Base|Base UI", module)
 			columns: tableColumns,
 			currentPage: number("currentPage", 1),
 			data: tableData,
+			filter: () => true,
 			filterable: boolean("filterable", true),
 			filters: tableFilters,
 			filtersSelected: object("filtersSelected", [tableFilters[0]]),
@@ -298,6 +299,7 @@ storiesOf("Base|Base UI", module)
 				:columns="columns"
 				:current-page.sync="currentPage"
 				:data="data"
+				:filter="filter"
 				:filterable="filterable"
 				:filters="filters"
 				:filtersSelected="filtersSelected"
