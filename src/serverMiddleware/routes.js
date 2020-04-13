@@ -4,6 +4,7 @@
 
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
+const shortId = "[A-Za-z0-9_-]+";
 
 module.exports = [
 	// `^/content/`,
@@ -14,4 +15,5 @@ module.exports = [
 	//`^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
+  `^/tools/${shortId}/link`,
 ];
