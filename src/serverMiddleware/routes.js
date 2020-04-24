@@ -11,6 +11,7 @@ module.exports = [
 	`^/administration/students/new/?$`,
 	`^/administration/teachers/?$`,
 	`^/administration/teachers/new/?$`,
+	`^/courses/?`,
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,

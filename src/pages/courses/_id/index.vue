@@ -3,14 +3,24 @@
 		<section class="section">
 			<base-breadcrumb :inputs="breadcrumbs" />
 			<h1 class="h2">{{ course.name }}</h1>
+			<course-content-list
+				:course-content="homeworksList"
+			></course-content-list>
 		</section>
+	</div>
+	<div v-else>
+		No Course data
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import CourseContentList from "@components/molecules/CourseContentList";
 
 export default {
+	components: {
+		CourseContentList,
+	},
 	async asyncData({ store, params }) {
 		return {
 			lessons: await store.dispatch("lessons/find", {
@@ -31,9 +41,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("courses", {
-			course: "current",
-		}),
+		...mapGetters("courses", { course: "current" }),
+		...mapGetters("lessons", { lessonsList: "list" }),
+		...mapGetters("homeworks", { homeworksList: "list" }),
 		breadcrumbs() {
 			return [
 				{ text: "Kurse", to: { name: "courses" } },
@@ -46,6 +56,10 @@ export default {
 	},
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
+	},
+	created() {
+		console.log("Course: ");
+		console.log(this.course);
 	},
 	methods: {
 		getCourse(id) {
