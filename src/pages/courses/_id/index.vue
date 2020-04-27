@@ -2,24 +2,36 @@
 	<div v-if="course">
 		<section class="section">
 			<base-breadcrumb :inputs="breadcrumbs" />
-			<h1 class="h2">{{ course.name }}</h1>
+			<div class="course-header">
+				<h1 class="h2">{{ course.name }}</h1>
+				<fab-icon
+					:actions="[
+						{
+							label: 'Dummy Label',
+							icon: 'person_add',
+							'icon-source': 'material',
+							to: '/courses',
+						},
+					]"
+				></fab-icon>
+			</div>
 			<course-content-list
-				:course-content="homeworksList"
+				:course-content="mergeCourseContent"
+				:course="course"
 			></course-content-list>
 		</section>
-	</div>
-	<div v-else>
-		No Course data
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import CourseContentList from "@components/molecules/CourseContentList";
+import FabIcon from "@components/molecules/FabIcon";
 
 export default {
 	components: {
 		CourseContentList,
+		FabIcon,
 	},
 	async asyncData({ store, params }) {
 		return {
@@ -53,13 +65,14 @@ export default {
 				},
 			];
 		},
+		mergeCourseContent() {
+			this.lessonsList.forEach((lesson) => (lesson.type = "lesson"));
+			this.homeworksList.forEach((homework) => (homework.type = "homework"));
+			return [...this.lessonsList, ...this.homeworksList];
+		},
 	},
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
-	},
-	created() {
-		console.log("Course: ");
-		console.log(this.course);
 	},
 	methods: {
 		getCourse(id) {
@@ -68,3 +81,16 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.course-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: var(--space-xl-2);
+}
+
+h1 {
+	margin: 0;
+}
+</style>

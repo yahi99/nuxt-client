@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div class="course-content-container">
 		<course-content-item
 			v-for="courseItem in courseContent"
 			:key="courseItem.id"
-			class="course-item"
+			v-bind="$attrs.course"
 			:course-item="courseItem"
 		></course-content-item>
 	</div>
@@ -15,6 +15,7 @@ export default {
 	components: {
 		CourseContentItem,
 	},
+	inheritAttrs: false,
 	props: {
 		courseContent: {
 			type: Array,
@@ -28,9 +29,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
-.course-item {
-	margin-bottom: var(--space-lg);
+.course-content-container {
+	display: flex;
+	flex-flow: column;
+	justify-content: space-between;
 }
 </style>
