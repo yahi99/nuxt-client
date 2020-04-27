@@ -1,12 +1,13 @@
 import { storiesOf } from "@storybook/vue";
 
- import notes from "./CourseContentItem.md"; 
+import notes from "./CourseContentItem.md";
 import CourseContentItem from "./CourseContentItem";
 
 storiesOf("Molecules/CourseContentItem", module)
 	.addParameters({
 		notes,
-	}).add("default", () => ({
+	})
+	.add("default", () => ({
 		components: { CourseContentItem },
 		template: `<CourseContentItem />`,
 		data: () => ({}),
