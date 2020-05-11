@@ -15,9 +15,29 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link"
+						>{{ link.text }}
+					</base-link>
+					<template v-if="index === 0">
+						<span :key="index + 7">
+							- {{ $t("components.legacy.footer.privacy_policy") }}:</span
+						>
+						<base-link
+							:key="index + 8"
+							class="footer-link"
+							v-bind="separatelink[0]"
+						>
+							{{ separatelink[0].text }}
+						</base-link>
+						<span :key="index + 9"> / </span>
+						<base-link
+							:key="index + 10"
+							class="footer-link"
+							v-bind="separatelink[1]"
+						>
+							{{ separatelink[1].text }}
+						</base-link>
+					</template>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
@@ -65,18 +85,32 @@ export default {
 		currentYear() {
 			return new Date().getFullYear();
 		},
+		separatelink() {
+			return [
+				{
+					to: "/team",
+					text: 'HPI',
+				},
+				{
+					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					text: 'Muster-Schulen',
+					target: "_blank",
+					rel: "noopener",
+				},
+			];
+		},
 		links() {
 			return [
 				{
 					to: "/imprint",
 					text: this.$t("components.legacy.footer.imprint"),
 				},
-				{
-					href: defaultDocuments.specificFiles().termsOfUseSchool,
-					text: this.$t("components.legacy.footer.terms"),
-					target: "_blank",
-					rel: "noopener",
-				},
+				// {
+				// 	href: defaultDocuments.specificFiles().termsOfUseSchool,
+				// 	text: this.$t("components.legacy.footer.terms"),
+				// 	target: "_blank",
+				// 	rel: "noopener",
+				// },
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
