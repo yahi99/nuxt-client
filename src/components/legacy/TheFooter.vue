@@ -89,11 +89,11 @@ export default {
 			return [
 				{
 					to: "/team",
-					text: 'HPI',
+					text: "HPI",
 				},
 				{
 					href: defaultDocuments.specificFiles().termsOfUseSchool,
-					text: 'Muster-Schulen',
+					text: "Muster-Schulen",
 					target: "_blank",
 					rel: "noopener",
 				},
