@@ -169,6 +169,22 @@ export function teacherFilter(ctx) {
 				},
 			],
 		},
+		{
+			title: "Klass",
+			chipTemplate: `Klass = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					label: "Klass",
+					input: InputDefault,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
+					},
+				},
+			],
+		},
 		getFilterFirstname(ctx),
 		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
