@@ -90,6 +90,17 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 export function studentFilter(ctx) {
+	const classesFilteringOptions = [];
+	const getUniqueClasses = async () => {
+		const students = await ctx.$store.dispatch("users/findStudents");
+		students.data
+			.reduce((acc, student) => [...new Set(acc.concat(student.classes))], [])
+			.forEach((cl) => {
+				classesFilteringOptions.push({ value: cl, label: cl });
+			});
+	};
+	getUniqueClasses();
+
 	return [
 		{
 			title: ctx.$t("utils.adminFilter.consent.title"),
@@ -126,6 +137,22 @@ export function studentFilter(ctx) {
 							label: ctx.$t("utils.adminFilter.consent.label.missing"),
 						},
 					],
+				},
+			],
+		},
+		{
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					input: InputCheckbox,
+					options: classesFilteringOptions,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
+					},
 				},
 			],
 		},
@@ -170,8 +197,8 @@ export function teacherFilter(ctx) {
 			],
 		},
 		{
-			title: "Klass",
-			chipTemplate: `Klass = %1`,
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.teacher.class.title")} = %1`,
 			filter: [
 				{
 					attribute: "classes",
