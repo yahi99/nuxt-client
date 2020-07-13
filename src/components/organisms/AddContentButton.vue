@@ -38,6 +38,7 @@
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 
+
 export default {
 	name: "AddContentButton",
 	components: {
