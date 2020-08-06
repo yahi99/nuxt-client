@@ -11,6 +11,41 @@
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+		<span class="info-button">
+			<base-button design="info text icon" @click="active = !active">
+				<base-icon source="material" icon="info" />
+			</base-button>
+		</span>
+		<info-box class="info-box" :active.sync="active">
+			<template v-slot:header>Registrierungen abschließen</template>
+			<template v-slot:body>
+				<div class="content">
+					{{ $t("pages.administration.students.infobox.paragraph-1") }}
+					<ul class="list">
+						<li>
+							{{ $t("pages.administration.students.infobox.li-1") }}
+						</li>
+						<li>
+							{{ $t("pages.administration.students.infobox.li-2") }}
+						</li>
+						<li>
+							{{ $t("pages.administration.students.infobox.li-3") }}
+						</li>
+					</ul>
+					{{ $t("pages.administration.students.infobox.paragraph-2") }}
+					<br />
+					<br />
+					{{ $t("pages.administration.students.infobox.paragraph-3") }}
+					<br />
+					<br />
+					<base-icon
+						source="material"
+						icon="warning"
+						color="var(--color-danger)"
+					/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
+				</div>
+			</template>
+		</info-box>
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
@@ -32,44 +67,7 @@
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:headcolumn-consent>
-				<span class="th-slot">
-					<span>{{ $t("common.labels.registration") }}</span>
-					<base-button design="info text icon" @click="active = !active">
-						<base-icon source="material" icon="info" />
-					</base-button>
-				</span>
-				<info-box class="info-box" :active.sync="active">
-					<template v-slot:header>Registrierungen abschließen</template>
-					<template v-slot:body>
-						<div class="content">
-							{{ $t("pages.administration.students.infobox.paragraph-1") }}
-							<ul class="list">
-								<li>
-									{{ $t("pages.administration.students.infobox.li-1") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-2") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-3") }}
-								</li>
-							</ul>
-							{{ $t("pages.administration.students.infobox.paragraph-2") }}
-							<br />
-							<br />
-							{{ $t("pages.administration.students.infobox.paragraph-3") }}
-							<br />
-							<br />
-							<base-icon
-								source="material"
-								icon="warning"
-								color="var(--color-danger)"
-							/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
-						</div>
-					</template>
-				</info-box>
-			</template>
+			<template v-slot:headcolumn-consent></template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
@@ -217,7 +215,7 @@ export default {
 				},
 				{
 					field: "consent",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
 				},
 				{
@@ -516,16 +514,16 @@ span {
 .list {
 	padding: var(--space-lg);
 }
-.th-slot {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
+.info-button {
+	position: absolute;
+	top: 20%;
+	left: 34%;
 }
 
 .info-box {
 	position: absolute;
-	right: 0%;
+	top: 24%;
+	left: 30%;
 	z-index: calc(var(--layer-fab) + 1);
 	max-width: 100%;
 	margin-top: var(--space-md);
