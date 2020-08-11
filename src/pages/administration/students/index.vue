@@ -6,16 +6,18 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
-		<data-filter
-			:filters="filters"
-			:backend-filtering="true"
-			:active-filters.sync="currentFilterQuery"
-		/>
-		<span class="info-button">
-			<base-button design="info text icon" @click="active = !active">
-				<base-icon source="material" icon="info" />
-			</base-button>
-		</span>
+		<div class="filter-container">
+			<data-filter
+				:filters="filters"
+				:backend-filtering="true"
+				:active-filters.sync="currentFilterQuery"
+			/>
+			<span class="info-button">
+				<base-button design="info text icon" @click="active = !active">
+					<base-icon source="material" icon="info" />
+				</base-button>
+			</span>
+		</div>
 		<info-box class="info-box" :active.sync="active">
 			<template v-slot:header>Registrierungen abschließen</template>
 			<template v-slot:body>
@@ -514,8 +516,10 @@ span {
 .list {
 	padding: var(--space-lg);
 }
+.filter-container {
+	display: flex;
+}
 .info-button {
-	position: absolute;
 	top: 20%;
 	left: 34%;
 }
