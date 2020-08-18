@@ -20,6 +20,9 @@
 		<span v-if="!labelHidden" class="label">
 			{{ label }}
 		</span>
+		<span v-if="icon">
+			<base-icon :source="icon.source" :icon="icon.type" :color="icon.color" />
+		</span>
 	</label>
 </template>
 <script>
@@ -57,6 +60,10 @@ export default {
 		label: {
 			type: String,
 			required: true,
+		},
+		icon: {
+			type: Object,
+			default: () => {},
 		},
 		labelHidden: Boolean,
 		showUndefinedState: Boolean,

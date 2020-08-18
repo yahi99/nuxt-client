@@ -10,6 +10,7 @@
 			:name="$uid"
 			:value="option.value"
 			:label="option.label"
+			:icon="option.icon"
 		/>
 	</fieldset>
 </template>

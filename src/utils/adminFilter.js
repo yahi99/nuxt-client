@@ -135,14 +135,29 @@ export function studentFilter(ctx) {
 						{
 							value: "ok",
 							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							icon: {
+								type: "doublecheck",
+								color: "var(--color-success)",
+								source: "custom",
+							},
 						},
 						{
 							value: "parentsAgreed",
 							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
+							icon: {
+								type: "check",
+								color: "var(--color-warning)",
+								source: "material",
+							},
 						},
 						{
 							value: "missing",
 							label: ctx.$t("utils.adminFilter.consent.label.missing"),
+							icon: {
+								type: "clear",
+								color: "var(--color-danger)",
+								source: "material",
+							},
 						},
 					],
 				},
