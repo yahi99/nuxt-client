@@ -209,10 +209,20 @@ export function teacherFilter(ctx) {
 						{
 							value: "ok",
 							label: ctx.$t("utils.adminFilter.teacher.consent.label.ok"),
+							icon: {
+								type: "doublecheck",
+								color: "var(--color-success)",
+								source: "custom",
+							},
 						},
 						{
 							value: "missing",
 							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
+							icon: {
+								type: "clear",
+								color: "var(--color-danger)",
+								source: "material",
+							},
 						},
 					],
 				},
