@@ -9,6 +9,7 @@ const routes = [
 	// `^/account/?$`,
 	`^/account/email/edit/?$`,
 	`^/account/name/edit/?$`,
+	`^/account/locale/edit/?$`,
 	`^/account/password/edit/?$`,
 	`^/account/password/edit/?$`,
 	`^/activation/${activationCode}/?$`,
