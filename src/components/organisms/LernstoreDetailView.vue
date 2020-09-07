@@ -115,6 +115,7 @@
 			<user-has-role class="floating-buttons" :role="isNotStudent">
 				<add-content-button
 					:resource="resource"
+					data-testid="add-btn"
 					btn-design="hero-cta"
 					btn-class="floating-button"
 					btn-size="large"
