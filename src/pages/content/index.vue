@@ -5,12 +5,11 @@
 			design="text icon"
 			type="button"
 			class="arrow__back"
-			data-testid="add-btn"
 			@click="goBack"
 		>
 			<base-icon source="material" icon="arrow_back" />
 		</base-button>
-		<div class="content" :class="{ inline: isInline }">
+		<div data-testid="add-btn" class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
 					v-model.lazy="searchQuery"
