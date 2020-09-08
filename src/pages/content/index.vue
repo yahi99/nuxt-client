@@ -5,6 +5,7 @@
 			design="text icon"
 			type="button"
 			class="arrow__back"
+			data-testid="add-btn"
 			@click="goBack"
 		>
 			<base-icon source="material" icon="arrow_back" />
