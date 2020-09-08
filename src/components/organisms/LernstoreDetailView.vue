@@ -121,6 +121,7 @@
 					btn-icon-class="footer__content-icon"
 					btn-icon="add"
 					:btn-label="$t('pages.content._id.addToTopic')"
+					data-testId="add-button"
 				/>
 			</user-has-role>
 		</div>

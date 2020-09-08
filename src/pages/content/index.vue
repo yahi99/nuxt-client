@@ -23,7 +23,11 @@
 				/>
 				<transition name="fade">
 					<div class="content__container">
-						<p v-if="resources.data.length !== 0" class="content__total">
+						<p
+							v-if="resources.data.length !== 0"
+							class="content__total"
+							data-testId="search-total"
+						>
 							{{ resources.total }}
 							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 						</p>

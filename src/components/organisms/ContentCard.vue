@@ -47,6 +47,7 @@
 									btn-design="text icon"
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
+									data-testId="add-button"
 								/>
 							</div>
 						</div>
