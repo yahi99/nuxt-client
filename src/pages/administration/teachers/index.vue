@@ -166,14 +166,6 @@ export default {
 			tableActions: [
 				{
 					label: this.$t(
-						"pages.administration.teachers.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
-				{
-					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
 					),
 					icon: "mail_outline",
@@ -247,7 +239,9 @@ export default {
 				},
 			],
 			filters: teacherFilter(this),
-			searchQuery: "",
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.students.index")
+					.searchQuery || "",
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -477,11 +471,13 @@ export default {
 						query,
 					});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "teachers",
-					});
+					setTimeout(() => {
+						this.$store.dispatch("users/handleUsers", {
+							query,
+							action: "find",
+							userType: "teachers",
+						});
+					}, 300);
 				},
 			};
 		},
